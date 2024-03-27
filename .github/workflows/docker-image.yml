@@ -1,0 +1,44 @@
+name: Docker Image
+on: [push]
+
+env:
+  IMAGE: "emf-equipment"
+  IMAGE_TAG: ""
+  GOOGLECLOUD_PROJECT: ${{ secrets.GOOGLECLOUD_PROJECT }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+            credentials_json: '${{ secrets.GOOGLECLOUD_KEY }}'
+
+      # Setup gcloud CLI
+      - uses: google-github-actions/setup-gcloud@v2
+
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - name: "Authenticate Docker"
+        run: gcloud auth configure-docker us-west1-docker.pkg.dev
+
+      # Calculate the image name
+      - name: Calculate Docker image name
+        run: echo "IMAGE_TAG=`git rev-parse --short HEAD`" >> $GITHUB_ENV
+
+      # Build the Docker image
+      - name: Build
+        run: |
+          docker build -t us-west1-docker.pkg.dev/"$GOOGLECLOUD_PROJECT"/"$IMAGE":"$IMAGE_TAG" .
+
+      # Push the Docker image to Google Container Registry
+      - name: Publish
+        run: |
+          docker push us-west1-docker.pkg.dev/"$GOOGLECLOUD_PROJECT"/"$IMAGE":"$IMAGE_TAG"
+
+      # Deploy to Google Cloud Run
+    #   - name: Deploy
+    #     run: |
+    #       gcloud run deploy aeracode --quiet --image gcr.io/$GOOGLECLOUD_PROJECT/$IMAGE:$IMAGE_TAG --platform managed --region us-central1 --project $GOOGLECLOUD_PROJECT
