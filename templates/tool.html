@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ tool.Name }}</h1>
+<p>Status: {{ tool.Status }}</p>
+{% if tool.Status == "In Use" %}
+    <form action="." method="POST">
+        <label>Storage Location: {{ form.location }}</label>
+        <input type="hidden" name="action" value="return">
+        <button>Return</button>
+    </form>
+{% else %}
+    <form action="." method="POST">
+        <label>Name and DECT: {{ form.location }}</label>
+        <input type="hidden" name="action" value="checkout">
+        <button>Check Out</button>
+    </form>
+{% endif %}
+{% endblock %}

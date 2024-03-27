@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <style>
+            body, html {
+                padding: 0;
+                margin: 0;
+            }
+            header {
+                background: #378;
+                color: white;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>EMFCamp Equipment Checkout</header>
+        {% block content %}{% endblock %}
+    </body>
+</html>
