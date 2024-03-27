@@ -2,7 +2,7 @@ name: Docker Image
 on: [push]
 
 env:
-  IMAGE: "emf-equipment"
+  IMAGE: "emf-equipment/emf-equipment"
   IMAGE_TAG: ""
   GOOGLECLOUD_PROJECT: ${{ secrets.GOOGLECLOUD_PROJECT }}
 
