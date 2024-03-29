@@ -4,12 +4,22 @@
 
     <h1>{{ tool.Name }}</h1>
 
-    <p>Status: {{ tool.Status }}</p>
-    {% if tool.Status == "In Use" %}
-        <p>With: {{ tool.Location }}</p>
-    {% else %}
-        <p>Location: {{ tool.Location }}</p>
-    {% endif %}
+    <table class="info">
+        <tr>
+            <td class="name">Status</td>
+            <td class="value"><span class="pill {{ tool.Status|slugify }}">{{ tool.Status }}</span></td>
+        </tr>
+        <tr>
+            <td class="name">{% if tool.Status == "In Use" %}With{% else %}Location{% endif %}</td>
+            <td class="value">{{ tool.Location }}</td>
+        </tr>
+        {% if tool.Notes %}
+        <tr>
+            <td class="name">Notes</td>
+            <td class="value">{{ tool.Notes }}</td>
+        </tr>
+        {% endif %}
+    </table>
 
     <form action="." method="POST">
         {% if tool.Status == "In Use" %}
