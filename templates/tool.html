@@ -1,19 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ tool.Name }}</h1>
-<p>Status: {{ tool.Status }}</p>
-{% if tool.Status == "In Use" %}
+
+    <h1>{{ tool.Name }}</h1>
+
+    <p>Status: {{ tool.Status }}</p>
+    {% if tool.Status == "In Use" %}
+        <p>With: {{ tool.Location }}</p>
+    {% else %}
+        <p>Location: {{ tool.Location }}</p>
+    {% endif %}
+
     <form action="." method="POST">
-        <label>Storage Location: {{ form.location }}</label>
-        <input type="hidden" name="action" value="return">
-        <button>Return</button>
+        {% if tool.Status == "In Use" %}
+            <label>Storage Location: {{ form.location }}</label>
+            <input type="hidden" name="action" value="return">
+            <button>Return</button>
+            {% csrf_token %}
+        {% else %}
+            <label>Name and DECT: {{ form.location }}</label>
+            <input type="hidden" name="action" value="checkout">
+            <button>Check Out</button>
+        {% endif %}
+        {% csrf_token %}
     </form>
-{% else %}
-    <form action="." method="POST">
-        <label>Name and DECT: {{ form.location }}</label>
-        <input type="hidden" name="action" value="checkout">
-        <button>Check Out</button>
-    </form>
-{% endif %}
 {% endblock %}
