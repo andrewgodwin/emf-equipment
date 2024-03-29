@@ -13,11 +13,14 @@ app = SingleFileApp()
 grist_document = os.environ["GRIST_DOCUMENT"]
 grist_server = os.environ.get("GRIST_SERVER", "https://grist.orga.emfcamp.org")
 api = GristDocAPI(grist_document, server=grist_server)
+table = "Equipment"
 
-TABLE = "Equipment"
 
 @app.path("")
 def index(request):
+    """
+    Top-level index page - just a nice error message
+    """
     return render(request, "index.html")
 
 
@@ -27,14 +30,17 @@ class CheckoutForm(forms.Form):
 
 @app.path("<int:tool_id>/")
 def tool(request, tool_id):
-    tool_records = api.fetch_table(TABLE, {"id": tool_id})
+    """
+    Individual tool checkout page
+    """
+    tool_records = api.fetch_table(table, {"id": tool_id})
     if not tool_records:
         return render(request, "error.html", {"error": "No tool found with that ID"})
     if request.method == "POST":
         form = CheckoutForm(request.POST)
         if form.is_valid():
             api.update_records(
-                TABLE,
+                table,
                 [
                     {
                         "id": tool_id,
@@ -60,11 +66,14 @@ def tool(request, tool_id):
     )
 
 
-@app.path("metrics")
+@app.path("metrics/")
 def stats(request):
+    """
+    Prometheus stats endpoint for tracking numbers
+    """
     counts = defaultdict(int)
     ts = int(time.time() * 1000)
-    for row in api.fetch_table(TABLE):
+    for row in api.fetch_table(table):
         counts[row.Status] += 1
     res = [
         "# HELP status_count Count of equipment in a given status",
@@ -73,8 +82,7 @@ def stats(request):
     for status, count in counts.items():
         res.append(f'status_count{{status="{status}"}} {count} {ts}')
     return HttpResponse(
-        "\n".join(res),
-        headers={"Content-Type": "text/plain; version=0.0.4"}
+        "\n".join(res), headers={"Content-Type": "text/plain; version=0.0.4"}
     )
 
 
