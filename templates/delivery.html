@@ -14,6 +14,14 @@
                 <td class="name">Status</td>
                 <td class="value"><span class="pill {{ delivery.Status|slugify }}">{{ delivery.Status }}</span></td>
             </tr>
+            <tr>
+                <td class="name">Description</td>
+                <td class="value">{{ delivery.Description }}</td>
+            </tr>
+            <tr>
+                <td class="name">Size</td>
+                <td class="value">{{ delivery.Size }}</td>
+            </tr>
             {% if delivery.Location %}
             <tr>
                 <td class="name">Location</td>
@@ -36,6 +44,12 @@
                 <td class="value">{{ delivery.Recipient_Team }}</td>
             </tr>
             {% endif %}
+            {% if delivery.Recipient_Village %}
+            <tr>
+                <td class="name">Recipient Village</td>
+                <td class="value">{{ delivery.Recipient_Village }}</td>
+            </tr>
+            {% endif %}
             {% if delivery.Courier %}
             <tr>
                 <td class="name">Courier</td>
@@ -46,6 +60,12 @@
             <tr>
                 <td class="name">Destination</td>
                 <td class="value">{{ delivery.Destination }}</td>
+            </tr>
+            {% endif %}
+            {% if delivery.Notes %}
+            <tr>
+                <td class="name">Notes</td>
+                <td class="value">{{ delivery.Notes }}</td>
             </tr>
             {% endif %}
         </table>
