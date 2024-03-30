@@ -4,7 +4,11 @@
         <link href="/static/style.css" rel="stylesheet" />
     </head>
     <body>
-        <header>EMF Equipment</header>
+        <header>
+            EMF Logistics
+            <small>{% block subheading %}Equipment{% endblock %}</small>
+            {% block header_extra %}{% endblock %}
+        </header>
         <section class="content">
             {% block content %}{% endblock %}
         </section>

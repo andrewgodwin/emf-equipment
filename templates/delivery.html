@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block subheading %}Deliveries{% endblock %}
+
+{% block header_extra %}<nav><a href="/d/">New Delivery</a></nav>{% endblock %}
+
+{% block content %}
+
+    {% if delivery %}
+        <h1>Delivery #{{ delivery.Tracking_Number|default:delivery.id }}</h1>
+
+        <table class="info">
+            <tr>
+                <td class="name">Status</td>
+                <td class="value"><span class="pill {{ delivery.Status|slugify }}">{{ delivery.Status }}</span></td>
+            </tr>
+            {% if delivery.Location %}
+            <tr>
+                <td class="name">Location</td>
+                <td class="value">{{ delivery.Location }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+                <td class="name">Recipient Name</td>
+                <td class="value">{{ delivery.Recipient_Name }}</td>
+            </tr>
+            {% if delivery.Recipient_Email_DECT %}
+            <tr>
+                <td class="name">Recipient Email/DECT</td>
+                <td class="value">{{ delivery.Recipient_Email_DECT }}</td>
+            </tr>
+            {% endif %}
+            {% if delivery.Recipient_Team %}
+            <tr>
+                <td class="name">Recipient Team</td>
+                <td class="value">{{ delivery.Recipient_Team }}</td>
+            </tr>
+            {% endif %}
+            {% if delivery.Courier %}
+            <tr>
+                <td class="name">Courier</td>
+                <td class="value">{{ delivery.Courier }}</td>
+            </tr>
+            {% endif %}
+            {% if delivery.Destination %}
+            <tr>
+                <td class="name">Destination</td>
+                <td class="value">{{ delivery.Destination }}</td>
+            </tr>
+            {% endif %}
+        </table>
+        <form action="." method="POST">
+            <input type="hidden" name="id" value="{{ delivery.id }}">
+            <input type="hidden" name="status" value="collected">
+            {% csrf_token %}
+            <button>Mark Collected</button>
+        </form>
+        <form action="." method="POST">
+            <label for="id_location" name="location">Storage Location</label>
+            <input name="location" id="id_location">
+            <input type="hidden" name="id" value="{{ delivery.id }}">
+            <input type="hidden" name="status" value="arrived">
+            {% csrf_token %}
+            <button>Mark Arrived</button>
+        </form>
+        <form action="." method="POST">
+            <label for="id_location" name="location">Dispatched With</label>
+            <input name="location" id="id_location">
+            <input type="hidden" name="id" value="{{ delivery.id }}">
+            <input type="hidden" name="status" value="dispatched">
+            {% csrf_token %}
+            <button>Mark Dispatched</button>
+        </form>
+
+    {% else %}
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        <form action="/d/" method="GET">
+            <p>
+                <label for="id_tracking">Tracking Number</label>
+                <input name="tracking" id="id_tracking" required>
+            </p>
+            <button>Lookup</button>
+        </form>
+        <script>document.getElementById("id_tracking").focus()</script>
+    {% endif %}
+
+{% endblock %}

@@ -23,12 +23,18 @@
 
     <form action="." method="POST">
         {% if tool.Status == "In Use" %}
-            <label>Storage Location: {{ form.location }}</label>
+            <p>
+                <label>Storage Location</label>
+                {{ form.location }}
+            </p>
             <input type="hidden" name="action" value="return">
             <button>Return</button>
             {% csrf_token %}
         {% else %}
-            <label>Name and DECT: {{ form.location }}</label>
+            <p>
+                <label for="id_location">Name and DECT</label>
+                {{ form.location }}
+            </p>
             <input type="hidden" name="action" value="checkout">
             <button>Check Out</button>
         {% endif %}
