@@ -10,7 +10,7 @@ from django.singlefile import SingleFileApp
 from django.views.generic.edit import FormView
 from grist_api import GristDocAPI
 
-app = SingleFileApp()
+app = SingleFileApp(ssl_header="HTTP_X_FORWARDED_PROTO")
 
 # Supply these two env vars plus GRIST_API_KEY
 grist_document = os.environ["GRIST_DOCUMENT"]
